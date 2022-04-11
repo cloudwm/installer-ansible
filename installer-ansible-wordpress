@@ -2,4 +2,4 @@
 
 . installer-ansible-pull-role
 
-pullrole stable '"service=wordpress"'
+pullrole stable '"service=wordpress-nginx service_webserver=nginx phpmyadmin_webserver=nginx"'

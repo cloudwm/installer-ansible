@@ -2,4 +2,4 @@
 
 . installer-ansible-pull-role
 
-pullrole dev '"service=haproxy"'
+pullrole staging '"service=haproxy"'
