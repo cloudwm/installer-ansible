@@ -1,0 +1,5 @@
+#!/bin/bash
+
+. installer-ansible-pull-role
+
+pullrole stable '"service=clustercontrol"'
