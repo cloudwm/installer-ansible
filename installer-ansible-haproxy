@@ -1,5 +1,5 @@
 #!/bin/bash
 
-. installer-ansible-pull-role
+source installer-ansible-pull-role
 
 pullrole staging '"service=haproxy"'
