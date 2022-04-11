@@ -1,4 +1,3 @@
-###README
 # Installer-ansible
 
 Installer-ansible is a set of scripts for installing services, apps and tweaking operating system on Ubuntu 18.04/20.04 LTS servers.
