@@ -3,7 +3,7 @@
 # Ansible-pull function to be used in all roles
 function pullrole() {
 #Load Global Functions File
-    . startup-cwm.sh
+    source startup-cwm.sh
     export DEBIAN_FRONTEND=noninteractive
     # Add Ansible repo and install
     add-apt-repository --yes --update ppa:ansible/ansible | log
