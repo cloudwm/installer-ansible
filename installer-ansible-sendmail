@@ -2,4 +2,4 @@
 
 source installer-ansible-pull-role
 
-pullrole stable '"service=sendmail"'
+pullrole stable "service=sendmail"

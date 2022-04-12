@@ -18,8 +18,11 @@ git clone https://www.github.com/cloudwm/installer-ansible.git
 ```
 
 - Edit installer-ansible-service (if customization is needed)
+
 Call Function: pullrole
+
 First variable = Git branch
+
 Second variable = Role specific variables
 
 Example:

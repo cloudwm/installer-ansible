@@ -2,4 +2,4 @@
 
 source installer-ansible-pull-role
 
-pullrole stable '"service=redis"'
+pullrole stable "service=redis"
