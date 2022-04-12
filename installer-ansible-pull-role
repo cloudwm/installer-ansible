@@ -4,15 +4,17 @@
 function pullrole() {
 #Load Global Functions File
     source startup-cwm.sh
+    . startup-cwm.sh
     export DEBIAN_FRONTEND=noninteractive
-    # Add Ansible repo and install
+    # Add Ansible repo and install Ansible & Pip & py3-logstash
     add-apt-repository --yes --update ppa:ansible/ansible | log
     apt install ansible pip -y | log
     waitOrStop 0 "Failed apt install ansible pip"
     python3 -m pip install python3-logstash | log
     waitOrStop 0 "Failed py3 pip install py3-logstash"
-    #Pull and run the relevant service
-    ansible-pull -i "localhost," -U https://github.com/cloudwm/ansible-pull-collection.git -C $1 -e $2
+    #Pull and run the relevant role
+    ansible-pull -i "localhost," -U https://github.com/cloudwm/ansible-pull-collection.git -C $1 -e ${2:-}
+    waitOrStop 0 "ansible-pull failed"
     apt purge ansible ansible-core -y | log
     rm -rf ~/.ansible*
 }
