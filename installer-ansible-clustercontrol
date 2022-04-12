@@ -3,3 +3,10 @@
 source installer-ansible-pull-role
 
 pullrole stable "service=clustercontrol-nginx service_webserver=nginx"
+
+echo "Adding description to CWM" | log
+descriptionAppend "CC Admin Web UI: https://${CWM_DISPLAYED_ADDRESS}"
+descriptionAppend "CC Email: ${ADMINEMAIL}"
+descriptionAppend "CC Username: root"
+descriptionAppend "CC Password: ${ADMINPASSWORD}" 
+descriptionAppend " "
