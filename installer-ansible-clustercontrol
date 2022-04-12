@@ -10,4 +10,3 @@ descriptionAppend "CC Email: ${ADMINEMAIL}"
 descriptionAppend "CC Username: root"
 descriptionAppend "CC Password: ${ADMINPASSWORD}" 
 descriptionAppend " "
-
