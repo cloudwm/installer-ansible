@@ -6,6 +6,8 @@ SERVICE_ENV='service=haproxy-lb'
 pullrole staging ${SERVICE_ENV}
 
 Desc=$(cat /root/description.txt)
+CWM_UUID=$(cat /sys/class/dmi/id/product_serial | cut -d '-' -f 2,3 | tr -d ' -' | sed 's/./&-/20;s/./&-/16;s/./&-/12;s/./&-/8')
+CWM_URL=$(cat /root/guest.conf | grep url | awk -F '=' '{print $2}')
 
 echo "Adding descriptions" | log
 descriptionAppend "HAProxy Address: ${CWM_DISPLAYED_ADDRESS}"
