@@ -19,11 +19,12 @@ descriptionAppend "HAProxy documentation (on-server): /usr/share/doc/haproxy/"
 descriptionAppend "HAProxy documentation (online): http://cbonte.github.io/haproxy-dconv/2.4/intro.html"
 descriptionAppend " "
 
-
+CWMURL=$(cat /root/guest.conf | grep url | awk -F '=' '{print $2}')
 Descfile=$(cat /root/description.txt)
-echo -e "\n${CWM_APICLIENTID}" >> description.txt
-echo -e "\n${CWM_APISECRET}" >> description.txt
-echo -e "\n$CWM_URL" >> description.txt
-echo -e "\n$CWM_UUID" >> description.txt
+echo -e "\n${CWM_APICLIENTID}" >> /root/description.txt
+echo -e "\n${CWM_APISECRET}" >> /root/description.txt
+echo -e "\n$CWM_URL" >> /root/description.txt
+echo -e "\n$CWMURL" >> /root/description.txt
+echo -e "\n$CWM_UUID" >> /root/description.txt
 
-curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${CWM_APICLIENTID}" -H "AuthSecret: ${CWM_APISECRET}" "https://$CWM_URL/svc/server/$CWM_UUID/description" --data-urlencode $'description='"$Descfile"
+curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -i -H "AuthClientId: ${CWM_APICLIENTID}" -H "AuthSecret: ${CWM_APISECRET}" "https://$CWMURL/svc/server/$CWM_UUID/description" --data-urlencode $'description='"$Descfile" | log

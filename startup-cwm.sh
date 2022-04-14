@@ -71,7 +71,7 @@ export CWM_SERVERIP="$(getServerIP)"
 export CWM_DOMAIN="${CWM_SERVERIP//./-}.cloud-xip.io"
 export CWM_DISPLAYED_ADDRESS=${CWM_SERVERIP}
 export CWM_DISPLAYED_ADDRESS=${CWM_DOMAIN}
-export CWM_URL=$(cat /root/guest.conf | grep url | awk -F '=' '{print $2}')
+# export CWM_URL=$(cat /root/guest.conf | grep url | awk -F '=' '{print $2}')
 
 function descriptionAppend() {
 
