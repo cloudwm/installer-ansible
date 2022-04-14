@@ -73,22 +73,6 @@ export CWM_DISPLAYED_ADDRESS=${CWM_SERVERIP}
 export CWM_DISPLAYED_ADDRESS=${CWM_DOMAIN}
 CWM_URL=$(cat /root/guest.conf | grep url | awk -F '=' '{print $2}')
 
-function updateServerDescription() {
-
-    curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${CWM_APICLIENTID}" -H "AuthSecret: ${CWM_APISECRET}" "https://$CWM_URL/svc/server/$CWM_UUID/description" --data-urlencode $'description='"$1"
-
-    local exitCode=$?
-    if [ $exitCode -ne 0 ]; then
-
-        echo "Error updating server description" | log 1
-        return 1
-
-    fi
-
-    echo "Updated Overview->Description data for $CWM_UUID" | log
-
-}
-
 function descriptionAppend() {
 
     echo "$1" >>$CWM_DESCFILE
@@ -184,6 +168,22 @@ function updateServerDescriptionTXT() {
     fi
 
     updateServerDescription "$uploadText"
+
+}
+
+function updateServerDescription() {
+
+    curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${CWM_APICLIENTID}" -H "AuthSecret: ${CWM_APISECRET}" "https://$CWM_URL/svc/server/$CWM_UUID/description" --data-urlencode $'description='"$1"
+
+    local exitCode=$?
+    if [ $exitCode -ne 0 ]; then
+
+        echo "Error updating server description" | log 1
+        return 1
+
+    fi
+
+    echo "Updated Overview->Description data for $CWM_UUID" | log
 
 }
 
