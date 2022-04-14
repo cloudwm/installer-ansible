@@ -5,7 +5,7 @@ source startup-cwm.sh
 SERVICE_ENV='service=haproxy-lb'
 
 
-pullrole staging ${SERVICE_ENV}
+pullrole stable ${SERVICE_ENV}
 
 echo "Adding descriptions" | log
 descriptionAppend "HAProxy Address: ${CWM_DISPLAYED_ADDRESS}"
