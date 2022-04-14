@@ -1,5 +1,6 @@
 #!/bin/bash
 
 source installer-ansible-pull-role
+SERVICE_ENV='service=nginx'
 
-pullrole stable "service=nginx"
+pullrole stable ${SERVICE_ENV}

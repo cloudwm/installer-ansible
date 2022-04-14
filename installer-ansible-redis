@@ -1,5 +1,6 @@
 #!/bin/bash
 
 source installer-ansible-pull-role
+SERVICE_ENV='service=redis'
 
-pullrole stable "service=redis"
+pullrole stable ${SERVICE_ENV}

@@ -1,5 +1,6 @@
 #!/bin/bash
 
 source installer-ansible-pull-role
+SERVICE_ENV='service=sendmail'
 
-pullrole stable "service=sendmail"
+pullrole stable ${SERVICE_ENV}

@@ -1,5 +1,6 @@
 #!/bin/bash
 
 source installer-ansible-pull-role
+SERVICE_ENV='service=postgresql'
 
-pullrole stable "service=postgresql"
+pullrole stable ${SERVICE_ENV}

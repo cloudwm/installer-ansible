@@ -3,7 +3,6 @@
 # Ansible-pull function to be used in all roles
 function pullrole() {
 #Load Global Functions File
-    # UUID=$(cat /sys/class/dmi/id/product_uuid)
     source startup-cwm.sh
     . startup-cwm.sh
     export DEBIAN_FRONTEND=noninteractive

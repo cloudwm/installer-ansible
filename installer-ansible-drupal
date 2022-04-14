@@ -1,5 +1,6 @@
 #!/bin/bash
 
 source installer-ansible-pull-role
+SERVICE_ENV='service=drupal'
 
-pullrole stable "service=drupal"
+pullrole stable ${SERVICE_ENV}

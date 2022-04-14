@@ -1,5 +1,6 @@
 #!/bin/bash
 
 source installer-ansible-pull-role
+SERVICE_ENV='service=phpmyadmin'
 
-pullrole stable "service=phpmyadmin"
+pullrole stable ${SERVICE_ENV}

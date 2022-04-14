@@ -1,5 +1,6 @@
 #!/bin/bash
 
 source installer-ansible-pull-role
+SERVICE_ENV='service=apache'
 
-pullrole stable "service=apache"
+pullrole stable ${SERVICE_ENV}

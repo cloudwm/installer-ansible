@@ -1,5 +1,6 @@
 #!/bin/bash
 
 source installer-ansible-pull-role
+SERVICE_ENV='service=mysql'
 
-pullrole stable "service=mysql"
+pullrole stable ${SERVICE_ENV}
