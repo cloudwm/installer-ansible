@@ -6,7 +6,7 @@ SERVICE_ENV='service=clustercontrol-nginx service_webserver=nginx'
 pullrole stable ${SERVICE_ENV}
 
 echo "Adding description to CWM" | log
-descriptionAppend "CC Admin Web UI: https://${CWM_DISPLAYED_ADDRESS}"
+descriptionAppend "CC Admin Web UI: https://${CWM_DOMAIN}"
 descriptionAppend "CC Email: ${ADMINEMAIL}"
 descriptionAppend "CC Username: root"
 descriptionAppend "CC Password: ${ADMINPASSWORD}" 
