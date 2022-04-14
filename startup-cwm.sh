@@ -18,33 +18,60 @@ if [ ! -f "$CWM_CONFIGFILE" ]; then
     return 0
 fi
 
+function getServerIP() {
+
+    if [ ! -f "$CWM_CONFIGFILE" ]; then
+
+        hostname -I | awk '{print $1}'
+        return 0
+
+    fi
+
+    if [ ! -z "$CWM_WANNICIDS" ]; then
+
+        typeset -a "cwm_wan_ids=($CWM_WANNICIDS)"
+        local mainip=$(echo "CWM_IP${cwm_wan_ids[0]}")
+        echo "${!mainip}"
+        return 0
+
+    fi
+
+    if [ ! -z "$CWM_LANNICIDS" ]; then
+
+        typeset -a "cwm_lan_ids=($CWM_LANNICIDS)"
+        local mainip=$(echo "CWM_IP${cwm_lan_ids[0]}")
+        echo "${!mainip}"
+        return 0
+
+    fi
+
+}
+
 # Function: updateServerDescription
 # Purpose: Update CWM Server's Overview->Description text field.
 # Usage: updateServerDescription "Some kind of description"
 
-    CONFIG=$(cat $CWM_CONFIGFILE)
-    STD_IFS=$IFS
-    IFS=$'\n'
-    for d in $CONFIG; do
-
-        key=$(echo $d | cut -f1 -d"=")
-        value=$(echo $d | cut -f2 -d"=")
-        export "CWM_${key^^}"="$value"
-
-    done
-    IFS=$STD_IFS
-    export ADMINEMAIL=$CWM_EMAIL
-    export ADMINPASSWORD="$CWM_PASSWORD"
-    mapfile -t wan_nicids < <(cat $CWM_CONFIGFILE | grep ^vlan.*=wan-.* | cut -f 1 -d"=" | cut -f 2 -d"n")
-    export CWM_WANNICIDS="$(printf '%q ' "${wan_nicids[@]}")"
-    mapfile -t lan_nicids < <(cat $CWM_CONFIGFILE | grep ^vlan.*=lan-.* | cut -f 1 -d"=" | cut -f 2 -d"n")
-    [[ ! -z "$lan_nicids" ]] && export CWM_LANNICIDS="$(printf '%q ' "${lan_nicids[@]}")"
-    export CWM_UUID=$(cat /sys/class/dmi/id/product_serial | cut -d '-' -f 2,3 | tr -d ' -' | sed 's/./&-/20;s/./&-/16;s/./&-/12;s/./&-/8')
-    export CWM_SERVERIP="$(getServerIP)"
-    export CWM_DOMAIN="${CWM_SERVERIP//./-}.cloud-xip.io"
-    export CWM_DISPLAYED_ADDRESS=${CWM_SERVERIP}
-    export CWM_DISPLAYED_ADDRESS=${CWM_DOMAIN}
-    CWM_URL=$(cat guest.conf | grep url | awk -F '=' '{print $2}')
+CONFIG=$(cat $CWM_CONFIGFILE)
+STD_IFS=$IFS
+IFS=$'\n'
+for d in $CONFIG; do
+    key=$(echo $d | cut -f1 -d"=")
+    value=$(echo $d | cut -f2 -d"=")
+    export "CWM_${key^^}"="$value"
+done
+IFS=$STD_IFS
+export ADMINEMAIL=$CWM_EMAIL
+export ADMINPASSWORD="$CWM_PASSWORD"
+mapfile -t wan_nicids < <(cat $CWM_CONFIGFILE | grep ^vlan.*=wan-.* | cut -f 1 -d"=" | cut -f 2 -d"n")
+export CWM_WANNICIDS="$(printf '%q ' "${wan_nicids[@]}")"
+mapfile -t lan_nicids < <(cat $CWM_CONFIGFILE | grep ^vlan.*=lan-.* | cut -f 1 -d"=" | cut -f 2 -d"n")
+[[ ! -z "$lan_nicids" ]] && export CWM_LANNICIDS="$(printf '%q ' "${lan_nicids[@]}")"
+export CWM_UUID=$(cat /sys/class/dmi/id/product_serial | cut -d '-' -f 2,3 | tr -d ' -' | sed 's/./&-/20;s/./&-/16;s/./&-/12;s/./&-/8')
+export CWM_SERVERIP="$(getServerIP)"
+export CWM_DOMAIN="${CWM_SERVERIP//./-}.cloud-xip.io"
+export CWM_DISPLAYED_ADDRESS=${CWM_SERVERIP}
+export CWM_DISPLAYED_ADDRESS=${CWM_DOMAIN}
+CWM_URL=$(cat /root/guest.conf | grep url | awk -F '=' '{print $2}')
 
 function updateServerDescription() {
 
@@ -169,35 +196,6 @@ function waitOrStop() {
 
         echo "ExitCode $exitCode (expecting $waitExitCode). ${2:-Undefined error.}" | log 1
         exit 1
-
-    fi
-
-}
-
-function getServerIP() {
-
-    if [ ! -f "$CWM_CONFIGFILE" ]; then
-
-        hostname -I | awk '{print $1}'
-        return 0
-
-    fi
-
-    if [ ! -z "$CWM_WANNICIDS" ]; then
-
-        typeset -a "cwm_wan_ids=($CWM_WANNICIDS)"
-        local mainip=$(echo "CWM_IP${cwm_wan_ids[0]}")
-        echo "${!mainip}"
-        return 0
-
-    fi
-
-    if [ ! -z "$CWM_LANNICIDS" ]; then
-
-        typeset -a "cwm_lan_ids=($CWM_LANNICIDS)"
-        local mainip=$(echo "CWM_IP${cwm_lan_ids[0]}")
-        echo "${!mainip}"
-        return 0
 
     fi
 
