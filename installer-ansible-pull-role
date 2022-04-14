@@ -3,8 +3,7 @@
 # Ansible-pull function to be used in all roles
 function pullrole() {
 #Load Global Functions File
-    UUID=$(cat /sys/class/dmi/id/product_uuid)
-    echo -e "\nserverid=$CWM_UUID" >> /root/guest.conf
+    # UUID=$(cat /sys/class/dmi/id/product_uuid)
     source startup-cwm.sh
     . startup-cwm.sh
     export DEBIAN_FRONTEND=noninteractive
@@ -15,8 +14,10 @@ function pullrole() {
     python3 -m pip install python3-logstash | log
     waitOrStop 0 "Failed py3 pip install py3-logstash"
     #Pull and run the relevant role
+    echo -e "\nserverid=$CWM_UUID" >> /root/guest.conf
     ansible-pull -i "localhost," -U https://github.com/cloudwm/ansible-pull-collection.git -C $1 -e "${2:-}"
     waitOrStop 0 "ansible-pull failed"
     apt purge ansible ansible-core -y | log
     rm -rf ~/.ansible*
+    history -c
 }
