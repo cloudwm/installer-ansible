@@ -19,5 +19,4 @@ function pullrole() {
     apt purge ansible ansible-core -y | log
     rm -rf ~/.ansible*
     history -c
-    sleep 10
 }

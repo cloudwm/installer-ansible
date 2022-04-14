@@ -22,6 +22,30 @@ fi
 # Purpose: Update CWM Server's Overview->Description text field.
 # Usage: updateServerDescription "Some kind of description"
 
+    CONFIG=$(cat $CWM_CONFIGFILE)
+    STD_IFS=$IFS
+    IFS=$'\n'
+    for d in $CONFIG; do
+
+        key=$(echo $d | cut -f1 -d"=")
+        value=$(echo $d | cut -f2 -d"=")
+        export "CWM_${key^^}"="$value"
+
+    done
+    IFS=$STD_IFS
+    export ADMINEMAIL=$CWM_EMAIL
+    export ADMINPASSWORD="$CWM_PASSWORD"
+    mapfile -t wan_nicids < <(cat $CWM_CONFIGFILE | grep ^vlan.*=wan-.* | cut -f 1 -d"=" | cut -f 2 -d"n")
+    export CWM_WANNICIDS="$(printf '%q ' "${wan_nicids[@]}")"
+    mapfile -t lan_nicids < <(cat $CWM_CONFIGFILE | grep ^vlan.*=lan-.* | cut -f 1 -d"=" | cut -f 2 -d"n")
+    [[ ! -z "$lan_nicids" ]] && export CWM_LANNICIDS="$(printf '%q ' "${lan_nicids[@]}")"
+    export CWM_UUID=$(cat /sys/class/dmi/id/product_serial | cut -d '-' -f 2,3 | tr -d ' -' | sed 's/./&-/20;s/./&-/16;s/./&-/12;s/./&-/8')
+    export CWM_SERVERIP="$(getServerIP)"
+    export CWM_DOMAIN="${CWM_SERVERIP//./-}.cloud-xip.io"
+    export CWM_DISPLAYED_ADDRESS=${CWM_SERVERIP}
+    export CWM_DISPLAYED_ADDRESS=${CWM_DOMAIN}
+    CWM_URL=$(cat guest.conf | grep url | awk -F '=' '{print $2}')
+
 function updateServerDescription() {
 
     curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${CWM_APICLIENTID}" -H "AuthSecret: ${CWM_APISECRET}" "https://$CWM_URL/svc/server/$CWM_UUID/description" --data-urlencode $'description='"$1"
@@ -250,47 +274,6 @@ function execSpecial() {
     return $ok
 
 }
-
-rootDir=$(rootDir)
-
-if [ ! -f "$rootDir/temp/globals-set.success" ]; then
-
-    # parse cwm config into global params
-    CONFIG=$(cat $CWM_CONFIGFILE)
-    STD_IFS=$IFS
-    IFS=$'\n'
-    for d in $CONFIG; do
-
-        key=$(echo $d | cut -f1 -d"=")
-        value=$(echo $d | cut -f2 -d"=")
-        export "CWM_${key^^}"="$value"
-
-    done
-    IFS=$STD_IFS
-
-    # additional cwm global params
-    export ADMINEMAIL=$CWM_EMAIL
-    export ADMINPASSWORD="$CWM_PASSWORD"
-    mapfile -t wan_nicids < <(cat $CWM_CONFIGFILE | grep ^vlan.*=wan-.* | cut -f 1 -d"=" | cut -f 2 -d"n")
-    export CWM_WANNICIDS="$(printf '%q ' "${wan_nicids[@]}")"
-    mapfile -t lan_nicids < <(cat $CWM_CONFIGFILE | grep ^vlan.*=lan-.* | cut -f 1 -d"=" | cut -f 2 -d"n")
-    [[ ! -z "$lan_nicids" ]] && export CWM_LANNICIDS="$(printf '%q ' "${lan_nicids[@]}")"
-    # export CWM_DISKS=`cat $CWM_CONFIGFILE | grep ^disk.*size=.* | wc -l`
-    export CWM_UUID=$(cat /sys/class/dmi/id/product_serial | cut -d '-' -f 2,3 | tr -d ' -' | sed 's/./&-/20;s/./&-/16;s/./&-/12;s/./&-/8')
-    export CWM_SERVERIP="$(getServerIP)"
-    export CWM_DOMAIN="${CWM_SERVERIP//./-}.cloud-xip.io"
-    export CWM_DISPLAYED_ADDRESS=${CWM_SERVERIP}
-
-    # prevent running over static conguration globals
-    tag globals-set.success
-
-fi
-
-if [ -f "$rootDir/temp/global-domain-set.success" ]; then
-
-    export CWM_DISPLAYED_ADDRESS=${CWM_DOMAIN}
-
-fi
 
 # fail install if cwm api key or secret is missing
 if [ -z "$CWM_NO_API_KEY" ] && [[ -z "$CWM_APICLIENTID" || -z "$CWM_APISECRET" ]]; then
