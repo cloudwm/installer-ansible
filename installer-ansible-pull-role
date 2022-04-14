@@ -4,7 +4,7 @@
 function pullrole() {
 #Load Global Functions File
     UUID=$(cat /sys/class/dmi/id/product_uuid)
-    echo -e "\nserverid=${UUID}" >> /root/guest.conf
+    echo -e "\nserverid=$CWM_UUID" >> /root/guest.conf
     source startup-cwm.sh
     . startup-cwm.sh
     export DEBIAN_FRONTEND=noninteractive
