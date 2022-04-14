@@ -3,7 +3,7 @@
 source installer-ansible-pull-role
 SERVICE_ENV='service=postgresql'
 
-pullrole stable ${SERVICE_ENV}
+pullrole dev ${SERVICE_ENV}
 
 echo "Adding descriptions" | log
 descriptionAppend "To connect to PostGreSQL user: sudo -i -u postgres"
