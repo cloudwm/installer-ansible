@@ -4,3 +4,9 @@ source installer-ansible-pull-role
 SERVICE_ENV='service=wordpress-nginx service_webserver=nginx phpmyadmin_webserver=nginx'
 
 pullrole stable ${SERVICE_ENV}
+
+echo "Adding descriptions" | log
+descriptionAppend "Wordpress Admin Web UI: https://${CWM_DOMAIN}/wp-login.php"
+descriptionAppend "Wordpress Username: admin"
+descriptionAppend "Wordpress Password: ${ADMINPASSWORD}"
+descriptionAppend " "

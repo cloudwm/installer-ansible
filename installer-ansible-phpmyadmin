@@ -4,3 +4,7 @@ source installer-ansible-pull-role
 SERVICE_ENV='service=phpmyadmin'
 
 pullrole stable ${SERVICE_ENV}
+
+echo "Adding descriptions" | log
+descriptionAppend "phpMyAdmin Web UI: https://${CWM_DISPLAYED_ADDRESS}/phpmyadmin"
+descriptionAppend " "

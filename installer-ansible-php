@@ -4,3 +4,8 @@ source installer-ansible-pull-role
 SERVICE_ENV='service=php'
 
 pullrole stable ${SERVICE_ENV}
+
+echo "Adding descriptions" | log
+descriptionAppend "PHP config files location: /etc/php/"
+descriptionAppend "PHP-FPM config files location: /etc/php/*/fpm/"
+descriptionAppend " "

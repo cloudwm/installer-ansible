@@ -4,3 +4,7 @@ source installer-ansible-pull-role
 SERVICE_ENV='service=redis'
 
 pullrole stable ${SERVICE_ENV}
+
+echo "Adding descriptions" | log
+descriptionAppend "Redis IP Address: ${CWM_DISPLAYED_ADDRESS}"
+descriptionAppend " "

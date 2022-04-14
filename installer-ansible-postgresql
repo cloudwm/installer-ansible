@@ -4,3 +4,9 @@ source installer-ansible-pull-role
 SERVICE_ENV='service=postgresql'
 
 pullrole stable ${SERVICE_ENV}
+
+echo "Adding descriptions" | log
+descriptionAppend "To connect to PostGreSQL user: sudo -i -u postgres"
+descriptionAppend "To connect to PostGreSQL CLI: psql"
+descriptionAppend "PostGreSQL listening port: 5432"
+descriptionAppend " "
