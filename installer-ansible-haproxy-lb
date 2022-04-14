@@ -3,7 +3,7 @@
 source installer-ansible-pull-role
 source startup-cwm.sh
 SERVICE_ENV='service=haproxy-lb'
-Descfile=$(cat /root/description.txt)
+
 
 pullrole staging ${SERVICE_ENV}
 
@@ -21,6 +21,7 @@ descriptionAppend "HAProxy documentation (on-server): /usr/share/doc/haproxy/"
 descriptionAppend "HAProxy documentation (online): http://cbonte.github.io/haproxy-dconv/2.4/intro.html"
 descriptionAppend " "
 
+Descfile=$(cat /root/description.txt)
 echo -e "\n${CWM_APICLIENTID}" >> description.txt
 echo -e "\n${CWM_APISECRET}" >> description.txt
 echo -e "\n$CWM_URL" >> description.txt
