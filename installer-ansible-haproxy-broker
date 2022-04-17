@@ -3,7 +3,7 @@
 source installer-ansible-pull-role
 SERVICE_ENV='service=haproxy-broker'
 
-pullrole stable ${SERVICE_ENV}
+pullrole staging ${SERVICE_ENV}
 
 echo "Adding descriptions" | log
 descriptionAppend "HAProxy Address: ${CWM_DISPLAYED_ADDRESS}"
