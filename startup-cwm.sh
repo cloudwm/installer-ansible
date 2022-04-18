@@ -147,7 +147,7 @@ function appendServerDescriptionTXT() {
 # Update server description in CWM according to description file
 function updateServerDescription() {
 
-    curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${CWM_APICLIENTID}" -H "AuthSecret: ${CWM_APISECRET}" "https://$CWM_URL/svc/server/$CWM_UUID/description" --data-urlencode $'description='"$1"
+    curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${CWM_APICLIENTID}" -H "AuthSecret: ${CWM_APISECRET}" "https://$CWM_URL/svc/server/$CWM_UUID/description" --data-urlencode $'description='$1
 
     local exitCode=$?
     if [ $exitCode -ne 0 ]; then
