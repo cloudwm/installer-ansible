@@ -11,8 +11,9 @@ descriptionAppend "Wordpress Username: admin"
 descriptionAppend "Wordpress Password: ${ADMINPASSWORD}"
 descriptionAppend " "
 
-DescContent=$(cat ~/description.txt)
-updateServerDescription "$DescContent"
+desccontent=$(cat ~/description.txt)
+fulltext=$(echo -e "$desccontent\\n$1")
+updateServerDescription "$fulltext"
 
 rm -rf /opt/installer-ansible
 rm -rf ~/.ansible*

@@ -10,8 +10,9 @@ descriptionAppend "PHP config files location: /etc/php/"
 descriptionAppend "PHP-FPM config files location: /etc/php/*/fpm/"
 descriptionAppend " "
 
-DescContent=$(cat ~/description.txt)
-updateServerDescription "$DescContent"
+desccontent=$(cat ~/description.txt)
+fulltext=$(echo -e "$desccontent\\n$1")
+updateServerDescription "$fulltext"
 
 rm -rf /opt/installer-ansible
 rm -rf ~/.ansible*

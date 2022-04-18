@@ -14,8 +14,9 @@ descriptionAppend "mySQL Server config global files location: /etc/mysql/"
 descriptionAppend "mySQL Server config user-specific file: ~/.my.cnf"
 descriptionAppend " "
 
-DescContent=$(cat ~/description.txt)
-updateServerDescription "$DescContent"
+desccontent=$(cat ~/description.txt)
+fulltext=$(echo -e "$desccontent\\n$1")
+updateServerDescription "$fulltext"
 
 rm -rf /opt/installer-ansible
 rm -rf ~/.ansible*
