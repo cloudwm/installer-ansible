@@ -21,7 +21,8 @@ descriptionAppend "HAProxy documentation (online): http://cbonte.github.io/hapro
 descriptionAppend " "
 
 set -x
-curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${CWM_APICLIENTID}" -H "AuthSecret: ${CWM_APISECRET}" "https://$CWM_URL/svc/server/$CWM_UUID/description" -d $'description='"$(cat ~/description.txt)"
+DESCTEXT="'"$(cat ~/description.txt)"'"
+curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${CWM_APICLIENTID}" -H "AuthSecret: ${CWM_APISECRET}" "https://$CWM_URL/svc/server/$CWM_UUID/description" -d $'description='"$DESCTEXT"
 set +x
 
 rm -rf /opt/installer-ansible
