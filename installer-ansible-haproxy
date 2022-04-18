@@ -20,11 +20,10 @@ descriptionAppend "HAProxy documentation (on-server): /usr/share/doc/haproxy/"
 descriptionAppend "HAProxy documentation (online): http://cbonte.github.io/haproxy-dconv/2.4/intro.html"
 descriptionAppend " "
 
-fileContent=$(cat ~/description.txt)
-fulltext=$(echo -e "$fileContent\\n$1")
+fileContent=$(cat $CWM_DESCFILE)
+uploadText=$(echo -e "$uploadText\\n\\n$fileContent")
 set -x
-updateServerDescription "$fileContent"
-updateServerDescription "$fulltext"
+updateServerDescription "$uploadText"
 set +x
 rm -rf /opt/installer-ansible
 rm -rf ~/.ansible*
