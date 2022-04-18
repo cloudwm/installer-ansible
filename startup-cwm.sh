@@ -141,8 +141,6 @@ function appendServerDescriptionTXT() {
 
     fulltext=$(echo -e "$description\\n\\n$fileContent")
     updateServerDescription "$fulltext"
-    updateServerDescription "$fileContent"
-    updateServerDescription "$uploadText"
 
 }
 
