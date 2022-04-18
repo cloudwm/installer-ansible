@@ -20,7 +20,7 @@ descriptionAppend "HAProxy documentation (online): http://cbonte.github.io/hapro
 descriptionAppend " "
 
 DescContent=$(cat ~/description.txt)
-updateServerDescription "$DescContent"
+updateServerDescription "'"$DescContent"'"
 
 rm -rf /opt/installer-ansible
 rm -rf ~/.ansible*

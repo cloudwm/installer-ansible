@@ -95,7 +95,22 @@ function log() {
 
 }
 
-# Get current server description from CWM
+function updateServerDescription() {
+
+    curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${CWM_APICLIENTID}" -H "AuthSecret: ${CWM_APISECRET}" "https://$CWM_URL/svc/server/$CWM_UUID/description" --data-urlencode $'description='"$1"
+
+    local exitCode=$?
+    if [ $exitCode -ne 0 ]; then
+
+        echo "Error updating server description" | log 1
+        return 1
+
+    fi
+
+    echo "Updated Overview->Description data for $CWM_UUID" | log
+
+}
+
 function getServerDescription() {
 
     description=$(curl --location -f --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${CWM_APICLIENTID}" -H "AuthSecret: ${CWM_APISECRET}" "https://$CWM_URL/svc/server/$CWM_UUID/overview" | grep -Po '(?<="description":")(.*?)(?=",")')
@@ -122,42 +137,49 @@ function appendServerDescription() {
 
 function appendServerDescriptionTXT() {
 
-    description=$(getServerDescription)
-    uploadText=$description
+    if [ -f "$CWM_DESCFILE" ]; then
 
+        fileContent=$(cat $CWM_DESCFILE)
+
+    fi
+
+    description=$(getServerDescription)
+    fulltext=$(echo -e "$description\\n\\n$fileContent")
+    updateServerDescription "$fulltext"
+
+}
+
+function setServerDescriptionTXT() {
+
+    if [ -f "$CWM_DESCFILE" ]; then
+
+        fileContent=$(cat $CWM_DESCFILE)
+
+    fi
+
+    updateServerDescription "$fileContent"
+
+}
+
+function updateServerDescriptionTXT() {
+
+    description=$(getServerDescription)
+
+    uploadText=$description
     if [[ ! -z "$CWM_GUESTDESCRIPTION" && $(noWhitespace "$CWM_GUESTDESCRIPTION") != $(noWhitespace "$description") ]]; then
 
         uploadText=$CWM_GUESTDESCRIPTION
 
     fi
 
-    if [ -f "$CWM_DESCFILE" ]; then
+    if [[ -f "$CWM_DESCFILE" ]]; then
 
         fileContent=$(cat $CWM_DESCFILE)
         uploadText=$(echo -e "$uploadText\\n\\n$fileContent")
 
     fi
 
-
-    fulltext=$(echo -e "$description\\n\\n$fileContent")
-    updateServerDescription "$fulltext"
-
-}
-
-# Update server description in CWM according to description file
-function updateServerDescription() {
-
-    curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${CWM_APICLIENTID}" -H "AuthSecret: ${CWM_APISECRET}" "https://$CWM_URL/svc/server/$CWM_UUID/description" --data-urlencode $'description='$1
-
-    local exitCode=$?
-    if [ $exitCode -ne 0 ]; then
-
-        echo "Error updating server description" | log 1
-        return 1
-
-    fi
-
-    echo "Updated Overview->Description data for $CWM_UUID" | log
+    updateServerDescription "$uploadText"
 
 }
 
