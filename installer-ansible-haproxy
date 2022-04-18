@@ -20,12 +20,7 @@ descriptionAppend "HAProxy documentation (on-server): /usr/share/doc/haproxy/"
 descriptionAppend "HAProxy documentation (online): http://cbonte.github.io/haproxy-dconv/2.4/intro.html"
 descriptionAppend " "
 
-APICLIENTID=$(cat guest.conf | grep Client | cut -f 2 -d"=")
-APISECRET=$(cat guest.conf | grep Secret | cut -f 2 -d"=")
-CONSOLEURL=$(cat guest.conf | grep url | cut -f 2 -d"=")
-VMUUID=$(cat guest.conf | grep serverid | cut -f 2 -d"=")
-full_desc=$(cat ~/description.txt)
-curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${APICLIENTID}" -H "AuthSecret: ${APISECRET}" "https://${CONSOLEURL}/svc/server/${VMUUID}/description" --data-urlencode $'description='"${full_desc}"
+updateServerDescription
 
 rm -rf /opt/installer-ansible
 rm -rf ~/.ansible*

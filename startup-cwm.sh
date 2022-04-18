@@ -149,7 +149,12 @@ function appendServerDescriptionTXT() {
 
 function updateServerDescription() {
 
-    curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${CWM_APICLIENTID}" -H "AuthSecret: ${CWM_APISECRET}" "https://$CWM_URL/svc/server/$CWM_UUID/description" --data-urlencode $'description='"$1"
+    APICLIENTID=$(cat ~/guest.conf | grep Client | cut -f 2 -d"=")
+    APISECRET=$(cat ~/guest.conf | grep Secret | cut -f 2 -d"=")
+    CONSOLEURL=$(cat ~/guest.conf | grep url | cut -f 2 -d"=")
+    VMUUID=$(cat ~/guest.conf | grep serverid | cut -f 2 -d"=")
+    full_desc=$(cat ~/description.txt)
+    curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${APICLIENTID}" -H "AuthSecret: ${APISECRET}" "https://${CONSOLEURL}/svc/server/${VMUUID}/description" --data-urlencode $'description='"${full_desc}"
 
     local exitCode=$?
     if [ $exitCode -ne 0 ]; then
