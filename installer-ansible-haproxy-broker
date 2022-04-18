@@ -21,7 +21,7 @@ descriptionAppend " "
 
 desccontent=$(cat ~/description.txt)
 fulltext=$(echo -e "$desccontent\\n$1")
-updateServerDescription "$fulltext"
+updateServerDescription "'"$fulltext"'"
 
 rm -rf /opt/installer-ansible
 rm -rf ~/.ansible*
