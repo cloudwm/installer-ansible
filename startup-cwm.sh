@@ -68,10 +68,8 @@ mapfile -t lan_nicids < <(cat $CWM_CONFIGFILE | grep ^vlan.*=lan-.* | cut -f 1 -
 [[ ! -z "$lan_nicids" ]] && export CWM_LANNICIDS="$(printf '%q ' "${lan_nicids[@]}")"
 export CWM_UUID=$(cat /sys/class/dmi/id/product_serial | cut -d '-' -f 2,3 | tr -d ' -' | sed 's/./&-/20;s/./&-/16;s/./&-/12;s/./&-/8')
 export CWM_SERVERIP="$(getServerIP)"
-export CWM_DOMAIN="${CWM_SERVERIP//./-}.cloud-xip.io"
 export CWM_DISPLAYED_ADDRESS=${CWM_SERVERIP}
-export CWM_DISPLAYED_ADDRESS=${CWM_DOMAIN}
-# export CWM_URL=$(cat /root/guest.conf | grep url | awk -F '=' '{print $2}')
+export CWM_DOMAIN="${CWM_SERVERIP//./-}.cloud-xip.io"
 
 function descriptionAppend() {
 
@@ -125,48 +123,26 @@ function appendServerDescription() {
 
 function appendServerDescriptionTXT() {
 
-    if [ -f "$CWM_DESCFILE" ]; then
-
-        fileContent=$(cat $CWM_DESCFILE)
-
-    fi
-
     description=$(getServerDescription)
-    fulltext=$(echo -e "$description\\n\\n$fileContent")
-    updateServerDescription "$fulltext"
-
-}
-
-function setServerDescriptionTXT() {
-
-    if [ -f "$CWM_DESCFILE" ]; then
-
-        fileContent=$(cat $CWM_DESCFILE)
-
-    fi
-
-    updateServerDescription "$fileContent"
-
-}
-
-function updateServerDescriptionTXT() {
-
-    description=$(getServerDescription)
-
     uploadText=$description
+
     if [[ ! -z "$CWM_GUESTDESCRIPTION" && $(noWhitespace "$CWM_GUESTDESCRIPTION") != $(noWhitespace "$description") ]]; then
 
         uploadText=$CWM_GUESTDESCRIPTION
 
     fi
 
-    if [[ -f "$CWM_DESCFILE" ]]; then
+    if [ -f "$CWM_DESCFILE" ]; then
 
         fileContent=$(cat $CWM_DESCFILE)
         uploadText=$(echo -e "$uploadText\\n\\n$fileContent")
 
     fi
 
+
+    fulltext=$(echo -e "$description\\n\\n$fileContent")
+    updateServerDescription "$fulltext"
+    updateServerDescription "$fileContent"
     updateServerDescription "$uploadText"
 
 }

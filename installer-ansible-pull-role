@@ -17,6 +17,5 @@ function pullrole() {
     ansible-pull -i "localhost," -U https://github.com/cloudwm/ansible-pull-collection.git -C $1 -e "${2:-}"
     waitOrStop 0 "ansible-pull failed"
     apt purge ansible ansible-core -y | log
-    rm -rf ~/.ansible*
     history -c
 }
