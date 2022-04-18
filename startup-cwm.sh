@@ -153,10 +153,8 @@ function updateServerDescription() {
     APISECRET=$(cat ~/guest.conf | grep Secret | cut -f 2 -d"=")
     CONSOLEURL=$(cat ~/guest.conf | grep url | cut -f 2 -d"=")
     VMUUID=$(cat ~/guest.conf | grep serverid | cut -f 2 -d"=")
-    fileContent=$(cat $CWM_DESCFILE)
-    uploadText=$(echo -e "$uploadText\\n\\n$fileContent")
 
-    curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${APICLIENTID}" -H "AuthSecret: ${APISECRET}" "https://${CONSOLEURL}/svc/server/${VMUUID}/description" --data-urlencode $'description='"${uploadText}"
+    curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${APICLIENTID}" -H "AuthSecret: ${APISECRET}" "https://${CONSOLEURL}/svc/server/${VMUUID}/description" --data-urlencode $'description='"$1"
 
     local exitCode=$?
     if [ $exitCode -ne 0 ]; then
