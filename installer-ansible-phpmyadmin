@@ -8,3 +8,9 @@ pullrole stable ${SERVICE_ENV}
 echo "Adding descriptions" | log
 descriptionAppend "phpMyAdmin Web UI: https://${CWM_DISPLAYED_ADDRESS}/phpmyadmin"
 descriptionAppend " "
+
+DescContent=$(cat ~/description.txt)
+updateServerDescription "$DescContent"
+
+rm -rf /opt/installer-ansible
+rm -rf ~/.ansible*

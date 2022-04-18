@@ -10,3 +10,9 @@ descriptionAppend "To connect to PostGreSQL user: sudo -i -u postgres"
 descriptionAppend "To connect to PostGreSQL CLI: psql"
 descriptionAppend "PostGreSQL listening port: 5432"
 descriptionAppend " "
+
+DescContent=$(cat ~/description.txt)
+updateServerDescription "$DescContent"
+
+rm -rf /opt/installer-ansible
+rm -rf ~/.ansible*

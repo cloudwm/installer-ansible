@@ -10,3 +10,9 @@ descriptionAppend "Wordpress Admin Web UI: https://${CWM_DOMAIN}/wp-login.php"
 descriptionAppend "Wordpress Username: admin"
 descriptionAppend "Wordpress Password: ${ADMINPASSWORD}"
 descriptionAppend " "
+
+DescContent=$(cat ~/description.txt)
+updateServerDescription "$DescContent"
+
+rm -rf /opt/installer-ansible
+rm -rf ~/.ansible*

@@ -11,3 +11,9 @@ descriptionAppend "CC Email: ${ADMINEMAIL}"
 descriptionAppend "CC Username: root"
 descriptionAppend "CC Password: ${ADMINPASSWORD}" 
 descriptionAppend " "
+
+DescContent=$(cat ~/description.txt)
+updateServerDescription "$DescContent"
+
+rm -rf /opt/installer-ansible
+rm -rf ~/.ansible*

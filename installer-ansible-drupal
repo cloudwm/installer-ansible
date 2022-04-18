@@ -10,3 +10,9 @@ descriptionAppend "Drupal Web UI: https://${CWM_DISPLAYED_ADDRESS}/user/login"
 descriptionAppend "Drupal Username: admin"
 descriptionAppend "Drupal Password: ${ADMINPASSWORD}"
 descriptionAppend " "
+
+DescContent=$(cat ~/description.txt)
+updateServerDescription "$DescContent"
+
+rm -rf /opt/installer-ansible
+rm -rf ~/.ansible*

@@ -20,10 +20,8 @@ descriptionAppend "HAProxy documentation (on-server): /usr/share/doc/haproxy/"
 descriptionAppend "HAProxy documentation (online): http://cbonte.github.io/haproxy-dconv/2.5/intro.html"
 descriptionAppend " "
 
-set -x
 DescContent=$(cat ~/description.txt)
 updateServerDescription "$DescContent"
-set +x
 
 rm -rf /opt/installer-ansible
 rm -rf ~/.ansible*
