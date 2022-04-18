@@ -47,10 +47,6 @@ function getServerIP() {
 
 }
 
-# Function: updateServerDescription
-# Purpose: Update CWM Server's Overview->Description text field.
-# Usage: updateServerDescription "Some kind of description"
-
 CONFIG=$(cat $CWM_CONFIGFILE)
 STD_IFS=$IFS
 IFS=$'\n'
@@ -71,6 +67,7 @@ export CWM_SERVERIP="$(getServerIP)"
 export CWM_DISPLAYED_ADDRESS=${CWM_SERVERIP}
 export CWM_DOMAIN="${CWM_SERVERIP//./-}.cloud-xip.io"
 
+# Append the following line to description file
 function descriptionAppend() {
 
     echo "$1" >>$CWM_DESCFILE
@@ -79,6 +76,7 @@ function descriptionAppend() {
 
 }
 
+# Append command stdout to error log
 function log() {
 
     logScriptName=$(basename $0)
@@ -97,6 +95,7 @@ function log() {
 
 }
 
+# Get current server description from CWM
 function getServerDescription() {
 
     description=$(curl --location -f --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${CWM_APICLIENTID}" -H "AuthSecret: ${CWM_APISECRET}" "https://$CWM_URL/svc/server/$CWM_UUID/overview" | grep -Po '(?<="description":")(.*?)(?=",")')
@@ -147,16 +146,18 @@ function appendServerDescriptionTXT() {
 
 }
 
+# Update server description in CWM according to description file
 function updateServerDescription() {
-    set -x
+
     APICLIENTID=$(cat ~/guest.conf | grep Client | cut -f 2 -d"=")
     APISECRET=$(cat ~/guest.conf | grep Secret | cut -f 2 -d"=")
     CONSOLEURL=$(cat ~/guest.conf | grep url | cut -f 2 -d"=")
     VMUUID=$(cat ~/guest.conf | grep serverid | cut -f 2 -d"=")
-    full_desc=$(cat ~/description.txt)
-    echo "id=${APICLIENTID} sec=${APISECRET} url=${CONSOLEURL} id=${VMUUID} des=${full_desc}" >> ~/description.txt
-    curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${APICLIENTID}" -H "AuthSecret: ${APISECRET}" "https://${CONSOLEURL}/svc/server/${VMUUID}/description" --data-urlencode $'description='"${full_desc}"
-    set +x
+    fileContent=$(cat $CWM_DESCFILE)
+    uploadText=$(echo -e "$uploadText\\n\\n$fileContent")
+
+    curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${APICLIENTID}" -H "AuthSecret: ${APISECRET}" "https://${CONSOLEURL}/svc/server/${VMUUID}/description" --data-urlencode $'description='"${uploadText}"
+
     local exitCode=$?
     if [ $exitCode -ne 0 ]; then
 
@@ -169,6 +170,7 @@ function updateServerDescription() {
 
 }
 
+# Wait for specified exitcode, exit if not equal to result
 function waitOrStop() {
 
     local exitCode=${PIPESTATUS[0]}
@@ -183,6 +185,7 @@ function waitOrStop() {
 
 }
 
+# Get all server IP's
 function getServerIPAll() {
 
     if [ ! -f "$CWM_CONFIGFILE" ]; then
