@@ -20,12 +20,12 @@ echo "HAProxy documentation (on-server): /usr/share/doc/haproxy/" >> /root/descr
 echo "HAProxy documentation (online): http://cbonte.github.io/haproxy-dconv/2.5/intro.html" >> /root/description.txt
 echo " " >> /root/description.txt
 
-APICLIENTID=$(apiClientId)
-APISECRET=$(apiSecret)
+APICLIENTID=$(cat guest.conf |grep apiClientId |cut -f 2 -d"=")
+APISECRET=$(cat guest.conf |grep apiSecret |cut -f 2 -d"=")
 URL=$(cat guest.conf |grep url |cut -f 2 -d"=")
 UUID=$(cat guest.conf |grep serverid |cut -f 2 -d"=")
 
-curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${APICLIENTID}" -H "AuthSecret: ${APISECRET}" "https://$URL/svc/server/$UUID/description" --data-urlencode description@/root/description.txt
+curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${APICLIENTID}" -H "AuthSecret: ${APISECRET}" "https://${URL}/svc/server/${UUID}/description" --data-urlencode description@/root/description.txt
 
 rm -rf /opt/installer-ansible
 rm -rf ~/.ansible*
