@@ -21,14 +21,12 @@ HAProxy documentation (on-server): /usr/share/doc/haproxy/
 HAProxy documentation (online): http://cbonte.github.io/haproxy-dconv/2.5/intro.html
 EOF
 
-cat << EOF > /root/description.sh
-APICLIENTID=$(cat /root/guest.conf |grep apiClientId |cut -d '=' -f 2)
-APISECRET=$(cat /root/guest.conf |grep apiSecret |cut -d '=' -f 2)
-URL=$(cat /root/guest.conf |grep url |cut -d '=' -f 2)
-UUID=$(cat /root/guest.conf |grep serverid |cut -d '=' -f 2)
-
-curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${APICLIENTID}" -H "AuthSecret: ${APISECRET}" "https://${URL}/svc/server/${UUID}/description" --data-urlencode description@/root/description.txt > /root/push.sh
-EOF
+touch /root/description.sh
+echo APICLIENTID=$(cat /root/guest.conf |grep apiClientId |cut -d '=' -f 2) >> /root/description.sh
+echo APISECRET=$(cat /root/guest.conf |grep apiSecret |cut -d '=' -f 2) >> /root/description.sh
+echo URL=$(cat /root/guest.conf |grep url |cut -d '=' -f 2) >> /root/description.sh
+echo UUID=$(cat /root/guest.conf |grep serverid |cut -d '=' -f 2) >> /root/description.sh
+echo 'curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: $APICLIENTID" -H "AuthSecret: $APISECRET" "https://$URL/svc/server/$UUID/description" --data-urlencode description@/root/description.txt' >> /root/description.sh
 chmod +x /root/description.sh
 at -f /root/description.sh now + 2 minutes
 
