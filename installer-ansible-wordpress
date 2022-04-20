@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source installer-ansible-pull-role
-SERVICE_ENV='service=wordpress-nginx service_webserver=nginx phpmyadmin_webserver=nginx'
+SERVICE_ENV='service=wordpress-nginx service_webserver=nginx'
 
 pullrole stable ${SERVICE_ENV}
 
