@@ -8,9 +8,8 @@ pullrole stable ${SERVICE_ENV}
 echo "Adding description to CWM" | log
 cat << EOF > /root/description.txt
 CC Admin Web UI: https://${CWM_DOMAIN}
-CC Email: ${ADMINEMAIL}
-CC Username: root
-CC Password: ${ADMINPASSWORD}"
+CC Login Username: ${ADMINEMAIL}
+CC Password: ${ADMINPASSWORD}
 EOF
 
 export APICLIENTID=$(cat /root/guest.conf |grep apiClientId |cut -d '=' -f 2)

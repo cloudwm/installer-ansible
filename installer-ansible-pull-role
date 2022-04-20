@@ -17,7 +17,7 @@ function pullrole() {
     fi
     #Pull and run the relevant role
     echo -e "\nserverid=$CWM_UUID" >> /root/guest.conf
-    ansible-pull -i "localhost," -U https://github.com/cloudwm/ansible-pull-collection.git -C $1 -e "${2:-}"
+    ansible-pull -i "localhost," -U https://github.com/cloudwm/ansible-pull-collection.git -C $1 -e "${@:2}"
     waitOrStop 0 "ansible-pull failed"
     apt purge ansible ansible-core -y | log
     history -c
