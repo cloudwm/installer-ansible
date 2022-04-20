@@ -7,11 +7,14 @@ function pullrole() {
     . startup-cwm.sh
     export DEBIAN_FRONTEND=noninteractive
     # Add Ansible repo and install Ansible & Pip & py3-logstash
-    add-apt-repository --yes --update ppa:ansible/ansible | log
-    apt install ansible pip -y | log
-    waitOrStop 0 "Failed apt install ansible pip"
-    python3 -m pip install python3-logstash | log
-    waitOrStop 0 "Failed py3 pip install py3-logstash"
+    which ansible
+    if [[ $? != 0 ]]; then
+        add-apt-repository --yes --update ppa:ansible/ansible | log
+        apt install ansible pip -y | log
+        waitOrStop 0 "Failed apt install ansible pip"
+        python3 -m pip install python3-logstash | log
+        waitOrStop 0 "Failed py3 pip install py3-logstash"
+    fi
     #Pull and run the relevant role
     echo -e "\nserverid=$CWM_UUID" >> /root/guest.conf
     ansible-pull -i "localhost," -U https://github.com/cloudwm/ansible-pull-collection.git -C $1 -e "${2:-}"
