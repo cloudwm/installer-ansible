@@ -27,7 +27,11 @@ export URL=$(cat /root/guest.conf |grep url |cut -d '=' -f 2)
 export UUID=$(cat /root/guest.conf |grep serverid |cut -d '=' -f 2)
 
 touch /root/description.sh
-echo curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: $APICLIENTID" -H "AuthSecret: $APISECRET" "https://$URL/svc/server/$UUID/description" --data-urlencode description@/root/description.txt >> /root/description.sh
+cat << EOF > /root/description.sh
+#!/bin/bash
+
+curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: $APICLIENTID" -H "AuthSecret: $APISECRET" "https://$URL/svc/server/$UUID/description" --data-urlencode description@/root/description.txt >> /root/description.sh
+EOF
 chmod +x /root/description.sh
 at -f /root/description.sh now + 2 minutes
 
