@@ -6,12 +6,25 @@ SERVICE_ENV='service=phpmyadmin'
 pullrole stable ${SERVICE_ENV}
 
 echo "Adding descriptions" | log
-descriptionAppend "phpMyAdmin Web UI: https://${CWM_DISPLAYED_ADDRESS}/phpmyadmin"
-descriptionAppend " "
+cat << EOF > /root/description.txt
+phpMyAdmin Web UI: https://${CWM_DISPLAYED_ADDRESS}/phpmyadmin
+phpMyAdmin Password: ${ADMINPASSWORD}
+EOF
 
-desccontent=$(cat ~/description.txt)
-fulltext=$(echo -e "$desccontent\\n$1")
-updateServerDescription "$fulltext"
+export APICLIENTID=$(cat /root/guest.conf |grep apiClientId |cut -d '=' -f 2)
+export APISECRET=$(cat /root/guest.conf |grep apiSecret |cut -d '=' -f 2)
+export URL=$(cat /root/guest.conf |grep url |cut -d '=' -f 2)
+export UUID=$(cat /root/guest.conf |grep serverid |cut -d '=' -f 2)
+
+touch /root/description.sh
+cat << EOF > /root/description.sh
+#!/bin/bash
+
+curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: $APICLIENTID" -H "AuthSecret: $APISECRET" "https://$URL/svc/server/$UUID/description" --data-urlencode description@/root/description.txt
+EOF
+chmod +x /root/description.sh
+cd /root/
+at -f /root/description.sh now + 3 minutes
 
 rm -rf /opt/installer-ansible
 rm -rf ~/.ansible*
