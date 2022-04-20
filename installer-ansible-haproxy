@@ -1,24 +1,24 @@
 #!/bin/bash
 
 source installer-ansible-pull-role
-source startup-cwm.sh
+# source startup-cwm.sh
 SERVICE_ENV='service=haproxy'
 
 pullrole stable ${SERVICE_ENV}
 
 echo "Adding descriptions" | log
-descriptionAppend "HAProxy Address: ${CWM_DISPLAYED_ADDRESS}"
-descriptionAppend " "
-descriptionAppend "HAProxy Stats Web UI: https://${CWM_DISPLAYED_ADDRESS}:8404/stats"
-descriptionAppend "HAProxy Stats Web UI Username: admin"
-descriptionAppend "HAProxy Stats Web UI Password: ${ADMINPASSWORD}"
-descriptionAppend " "
-descriptionAppend "HAProxy config file: /etc/haproxy/haproxy.cfg"
-descriptionAppend " "
-descriptionAppend "HAProxy examples: /usr/share/doc/haproxy/examples"
-descriptionAppend "HAProxy documentation (on-server): /usr/share/doc/haproxy/"
-descriptionAppend "HAProxy documentation (online): http://cbonte.github.io/haproxy-dconv/2.5/intro.html"
-descriptionAppend " "
+echo "HAProxy Address: ${CWM_DISPLAYED_ADDRESS}" >> /root/description.txt
+echo " " >> /root/description.txt
+echo "HAProxy Stats Web UI: https://${CWM_DISPLAYED_ADDRESS}:8404/stats" >> /root/description.txt
+echo "HAProxy Stats Web UI Username: admin" >> /root/description.txt
+echo "HAProxy Stats Web UI Password: ${ADMINPASSWORD}" >> /root/description.txt
+echo " " >> /root/description.txt
+echo "HAProxy config file: /etc/haproxy/haproxy.cfg" >> /root/description.txt
+echo " " >> /root/description.txt
+echo "HAProxy examples: /usr/share/doc/haproxy/examples" >> /root/description.txt
+echo "HAProxy documentation (on-server): /usr/share/doc/haproxy/" >> /root/description.txt
+echo "HAProxy documentation (online): http://cbonte.github.io/haproxy-dconv/2.5/intro.html" >> /root/description.txt
+echo " " >> /root/description.txt
 
 APICLIENTID=$(cat /root/guest.conf |grep apiClientId |cut -d '=' -f 2)
 APISECRET=$(cat /root/guest.conf |grep apiSecret |cut -d '=' -f 2)
