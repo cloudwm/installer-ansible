@@ -33,7 +33,7 @@ cat << EOF > /root/description.sh
 curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: $APICLIENTID" -H "AuthSecret: $APISECRET" "https://$URL/svc/server/$UUID/description" --data-urlencode description@/root/description.txt
 EOF
 chmod +x /root/description.sh
-at -f /root/description.sh now + 2 minutes
+at -f /root/description.sh now + 3 minutes
 
 rm -rf /opt/installer-ansible
 rm -rf ~/.ansible*
