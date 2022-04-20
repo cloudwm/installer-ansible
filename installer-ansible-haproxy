@@ -20,9 +20,12 @@ descriptionAppend "HAProxy documentation (on-server): /usr/share/doc/haproxy/"
 descriptionAppend "HAProxy documentation (online): http://cbonte.github.io/haproxy-dconv/2.5/intro.html"
 descriptionAppend " "
 
-desccontent=$(cat ~/description.txt)
-fulltext=$(echo -e "$desccontent\\n$1")
-updateServerDescription "$fulltext"
+APICLIENTID=$(cat /root/guest.conf |grep apiClientId |cut -d '=' -f 2)
+APISECRET=$(cat /root/guest.conf |grep apiSecret |cut -d '=' -f 2)
+URL=$(cat /root/guest.conf |grep url |cut -d '=' -f 2)
+UUID=$(cat /root/guest.conf |grep serverid |cut -d '=' -f 2)
+
+curl --location -f -X PUT --retry-connrefused --retry 3 --retry-delay 2 -H "AuthClientId: ${APICLIENTID}" -H "AuthSecret: ${APISECRET}" "https://$URL/svc/server/$UUID/description" --data-urlencode description@/root/description.txt | at now +1 minutes
 
 rm -rf /opt/installer-ansible
 rm -rf ~/.ansible*
